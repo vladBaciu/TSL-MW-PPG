@@ -77,14 +77,14 @@ class DataFile:
     def update_labels_list(self, labels):
         self.labels_list = []
         for i, key in enumerate(list(self.df)):
-            if key in labels:
+            if ''.join(labels) in key:
                 data = self.df.iloc[:, i]
                 self.labels_list.append([key, self.get_label_range(data)])
 
         # Labels are removed from DataFrame to avoid mistakes
-        for label in labels:
-            if label in list(self.df):
-                del self.df[label]
+        for label in self.labels_list:
+            if label[0] in list(self.df):
+                del self.df[label[0]]
 
     def get_label_series(self, label):
         a = label[1][0]

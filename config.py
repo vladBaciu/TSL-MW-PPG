@@ -256,7 +256,11 @@ class ProjectData:
         return label, color
 
     def get_label_color(self, label):
-        index = self.config["labels"].index(label)
+        try:
+            index = self.config["labels"].index(label)
+        except:
+            #if label not existent, get default color
+            index = 0
         return self.config["colors"][index]
 
     def get_labels_info(self):
