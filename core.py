@@ -105,13 +105,14 @@ class PlotCore:
             #add rectangle for each plot
             for plots in self.plotters:
                 plots.add_rect(x1=x1, x2=x2, color=color)
+            datafile.labels_list.append([label, (a, b)])
+
         else:
             #add rectangle for one plot
             channel_index = self.subplot_event(event_axis)
             self.plotters[channel_index].add_rect(x1=x1, x2=x2, color=color)
             label = label + '_ch' + str(channel_index)
-
-        datafile.labels_list.append([label, (a, b)])
+            datafile.labels_list.append([label, (a, b), channel_index])
 
         self.canvas.modified = True
         self.canvas.draw()
@@ -121,23 +122,39 @@ class PlotCore:
         if clk is None:
             return
 
-        for plots in self.plotters:
-            plots.remove_rect(clk)
-        del config.get_datafile().labels_list[clk]
+        _, is_channel_independent = config.get_additional_options()
 
+        if is_channel_independent == 'false':
+            for i, plots in enumerate(self.plotters):
+                    plots.remove_rect(clk[0])
+            del config.get_datafile().labels_list[clk[0]]
+        else:
+            for i, plots in enumerate(self.plotters):
+                if(clk[1] == i):
+                    plots.remove_rect(clk[0])
+            counter = 0
+            for index, item in enumerate(config.get_datafile().labels_list):
+                if(item[2] == clk[1]):
+                    if(counter == clk[0]):
+                        del config.get_datafile().labels_list[index]
+                        break
+                    counter = counter + 1
         self.canvas.modified = True
         self.canvas.draw()
 
     def find_clicked_rect(self, event):
         clicked_rects = None
-        for plots in self.plotters:
+        plot_number = 0
+
+        for i, plots in enumerate(self.plotters):
             if event.inaxes == plots.plot:
                 clicked_rects = plots.click_on_rect(event)
+                plot_number = i
         index = [i for i, x in enumerate(clicked_rects) if x]
         if len(index) == 0:
             return None
         else:
-            return index[-1]
+            return index[-1], plot_number
 
     def insert_labels(self):
         datafile = config.get_datafile()
@@ -273,8 +290,7 @@ class PlotCanvas(FigureCanvas):
             index = self.core.subplots.index(event.inaxes)
             popup = RightClickMenu(self, index, event)
             popup.exec_()
-            if popup.reload:
-                self.core.redraw()
+
 
     def on_mouse_release(self, event):
         if event.button not in (MOUSE_LEFT, MOUSE_RIGHT) or event.inaxes not in self.core.subplots:

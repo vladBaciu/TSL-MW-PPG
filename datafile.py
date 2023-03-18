@@ -1,7 +1,8 @@
 import os
 import pandas as pd
-from formats.format import *
 import config
+from pathlib import Path
+from formats.format import *
 
 TIMESTAMP = 'Timestamp'
 
@@ -153,7 +154,9 @@ class DataFile:
         if label_df is not None:
             all_data_final = pd.concat([all_data, label_df], axis=1)
 
-        self.io.save(all_data_final, self.filename)
+        file_path = Path(self.filename)
+        new_file_name = file_path.with_name(file_path.stem + '_tsl_generated' + file_path.suffix)
+        self.io.save(all_data_final, new_file_name)
 
         # merge labels if is an anomaly detection project
         anomaly_detection_options = config.get_additional_options()
