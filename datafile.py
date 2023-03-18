@@ -88,6 +88,7 @@ class DataFile:
                 del self.df[label[0]]
 
     def get_label_series(self, label):
+        print("New label added:", label)
         a = label[1][0]
         b = label[1][1] + 1
         n_rows = self.get_shape()
