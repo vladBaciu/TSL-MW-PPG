@@ -1,1 +1,1 @@
-{"files": ["random.csv", "random2.csv", "random3.csv", "random4.csv"], "labels": ["Label", "label_test"], "colors": ["#1f77b4", "#aa55ff"], "binary_class": "true", "independent_channels": "true", "['Random #1', 'Random #2', 'Random #3', 'Random #4']": {"plot": [[0], [1], [2], [3]], "normalize": [], "functions": []}}
+{"files": ["random.csv"], "labels": ["Label"], "colors": ["#1f77b4"], "binary_class": "true", "independent_channels": "true", "['Random #1', 'Random #2', 'Random #3', 'Random #4']": {"plot": [[0], [1], [2], [3]], "normalize": [], "functions": []}}
