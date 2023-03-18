@@ -27,6 +27,9 @@ class PlotCore:
         self.plotters = []
         self.timestamp = None
 
+        #read config options and check if channels are treated independently
+        _, self.is_channel_independent = config.get_additional_options()
+
     def clear(self):
         for plot in self.subplots:
             self.figure.delaxes(plot)
@@ -100,18 +103,18 @@ class PlotCore:
                 x1 = x1 - span
                 x2 = x2 + span
 
-        _, is_channel_independent = config.get_additional_options()
-        if is_channel_independent == 'false':
-            #add rectangle for each plot
+        if self.is_channel_independent == 'false': #add rectangle for all plots
             for plots in self.plotters:
                 plots.add_rect(x1=x1, x2=x2, color=color)
             datafile.labels_list.append([label, (a, b)])
-
-        else:
-            #add rectangle for one plot
+        else: #add rectangle for one plot
+            #get subplot number
             channel_index = self.subplot_event(event_axis)
+            #add rectangle on the right plot
             self.plotters[channel_index].add_rect(x1=x1, x2=x2, color=color)
+            #create a new label name for each channel (aka plot)
             label = label + '_ch' + str(channel_index)
+            #add rectangle object in label list
             datafile.labels_list.append([label, (a, b), channel_index])
 
         self.canvas.modified = True
@@ -122,19 +125,24 @@ class PlotCore:
         if clk is None:
             return
 
-        _, is_channel_independent = config.get_additional_options()
-
-        if is_channel_independent == 'false':
+        if self.is_channel_independent == 'false':
+            #remove rectangle for all plots
             for i, plots in enumerate(self.plotters):
                     plots.remove_rect(clk[0])
+            #remove label
             del config.get_datafile().labels_list[clk[0]]
         else:
+            #search through plots and remove rectangle
             for i, plots in enumerate(self.plotters):
                 if(clk[1] == i):
                     plots.remove_rect(clk[0])
+            #remove label.
             counter = 0
+            #go through all labels
             for index, item in enumerate(config.get_datafile().labels_list):
+                #search only labels assigned to one plot (aka channel)
                 if(item[2] == clk[1]):
+                    #check if label index is equal
                     if(counter == clk[0]):
                         del config.get_datafile().labels_list[index]
                         break
@@ -229,6 +237,9 @@ class PlotCanvas(FigureCanvas):
         self.figure.canvas.mpl_connect('button_release_event', self.on_mouse_release)
         self.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
 
+        #read config options and check if channels are treated independently
+        _, self.is_channel_independent = config.get_additional_options()
+
     def init(self):
         self.toolbar.update_label()
         self.core.plot()
@@ -315,8 +326,7 @@ class PlotCanvas(FigureCanvas):
             return
 
         #if channels are independend, move line just for one channel
-        _, is_channel_independent = config.get_additional_options()
-        if is_channel_independent == 'true':
+        if self.is_channel_independent == 'true':
             #get subplot number
             subplot_number = self.core.subplot_event(event.inaxes)
 
