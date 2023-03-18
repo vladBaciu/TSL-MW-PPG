@@ -498,8 +498,13 @@ def get_label_color(label_name):
     return data_config.get_label_color(label_name)
 
 def get_additional_options():
-    return data_config.get_additional_options()
-
+    try:
+        additional_options = data_config.get_additional_options()
+    except:
+        #case when no project is available and only one file is selected. to be modified manually
+        #[AD project, Independent channels]
+        additional_options = ["true", "false"]
+    return additional_options
 def get_functions():
     return data_config.get_functions()
 
