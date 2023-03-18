@@ -93,7 +93,11 @@ class DataFile:
         n_rows = self.get_shape()
         s = pd.Series(n_rows * ['0'], name=label[0])
         for i in range(a, b):
-            s.iat[i] = '1'
+            try:
+                s.iat[i] = '1'
+            except:
+                #selection on the plot goes beyond array size due to the existent visual margin; ignore
+                pass
         return s
 
     def merge_same_label_types(self, columns):
