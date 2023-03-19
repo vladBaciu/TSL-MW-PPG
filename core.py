@@ -141,7 +141,7 @@ class PlotCore:
             #go through all labels
             for index, item in enumerate(config.get_datafile().labels_list):
                 #search only labels assigned to one plot (aka channel)
-                if(item[2] == clk[1]):
+                if(("ch" + str(clk[1])) in item[0]):
                     #check if label index is equal
                     if(counter == clk[0]):
                         del config.get_datafile().labels_list[index]
@@ -183,7 +183,7 @@ class PlotCore:
 
             for index, plot in enumerate(self.plotters):
                 if (self.is_channel_independent == 'true'):
-                    if(index == lab[2]):
+                    if(('ch' + str(index)) in lab[0]):
                         #add rect only for the right plot
                         plot.add_rect(x1=x1, x2=x2, color=config.get_label_color(lab[0]))
                 else:

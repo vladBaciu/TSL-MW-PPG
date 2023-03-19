@@ -4,6 +4,7 @@ import logging
 from datafile import DataFile
 from formats.format import *
 import dialogs
+from pathlib import Path
 
 PROJECT_CONFIG = "project.json"
 
@@ -199,25 +200,29 @@ class ProjectData:
 
         current = self.config["files"][self.current_file]
         file_path = os.path.join(self.folder, current)
+        file_path_tsl = file_path
 
-        if current in self.bad_files or not os.path.exists(file_path):
-            if not os.path.exists(file_path):
+        #create potential tls_generated file name
+        file_path_tsl = Path(file_path)
+        file_path_tsl = file_path_tsl.with_name(file_path_tsl.stem + '_tsl_generated' + file_path_tsl.suffix)
+
+        try:
+            #try reading tsl_generated file if exists
+            self.datafile = DataFile(file_path_tsl, self.config["labels"])
+            self.datafile.filename = file_path
+            self.insert_header()
+        except:
+            #if there is no tsl_generated file yet, read normal file type
+            try:
+                self.datafile = DataFile(file_path, self.config["labels"])
+                self.insert_header()
+            except (UnrecognizedFormatError, BadFileError):
+                #thow error if format is not recognized
                 self.datafile = None
                 self.bad_files.append(current)
                 dialogs.notify_read_error(current)
-            self.next_file()
-            self.read_file()
-            return
-
-        try:
-            self.datafile = DataFile(file_path, self.config["labels"])
-            self.insert_header()
-        except (UnrecognizedFormatError, BadFileError):
-            self.datafile = None
-            self.bad_files.append(current)
-            dialogs.notify_read_error(current)
-            self.next_file()
-            self.read_file()
+                self.next_file()
+                self.read_file()
 
     def insert_header(self):
         header = self.datafile.get_data_header()
