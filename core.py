@@ -421,7 +421,6 @@ class PlotToolbar(NavigationToolbar):
             ('Forward', 'Next file', 'forward', 'forward'),
             (None, None, None, None),
             ('Pan', 'Pan axes with left mouse, zoom with right', 'move', 'pan'),
-            ('Zoom', 'Zoom to rectangle', 'zoom_to_rect', 'zoom'),
             ('Save', 'Save the figure', 'filesave', 'save_figure')
         )
         super().__init__(canvas, root, False)
