@@ -87,16 +87,14 @@ class Plotter:
         new_xlim_max = new_xlim_min + dim / factor
 
         # Requires special handling if downsampled: not all points can be shown at once
-        if self.is_sampled():
-            self.plot.clear()
-            self.line = self.plot.axvline(x=center_on, linestyle='dashed', color='black', linewidth=1)
-
-            zoomed_set = self.process_zoom([new_xlim_min, new_xlim_max])
-            zoomed_set = self.insert_timestamp(zoomed_set) if self.timestamp else zoomed_set
-
-            [self.plot.plot(df) for df in zoomed_set]
-            self.manage_timestamp() if self.timestamp else None
-            self.plot.lines.append(self.plot.lines.pop(0))
+        #if self.is_sampled():
+        #    self.plot.clear()
+        #    self.line = self.plot.axvline(x=center_on, linestyle='dashed', color='black', linewidth=1)
+        #    zoomed_set = self.process_zoom([new_xlim_min, new_xlim_max])
+        #    zoomed_set = self.insert_timestamp(zoomed_set) if self.timestamp else zoomed_set
+        #    [self.plot.plot(df) for df in zoomed_set]
+        #    self.manage_timestamp() if self.timestamp else None
+        #    self.plot.add_line(self.plot.get_lines()[0])
 
         self.plot.set_xlim([new_xlim_min, new_xlim_max])
 
