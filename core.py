@@ -181,8 +181,14 @@ class PlotCore:
                     x1 = x1 - 0.5
                     x2 = x2 + 0.5
 
-            for plot in self.plotters:
-                plot.add_rect(x1=x1, x2=x2, color=config.get_label_color(lab[0]))
+            for index, plot in enumerate(self.plotters):
+                if (self.is_channel_independent == 'true'):
+                    if(index == lab[2]):
+                        #add rect only for the right plot
+                        plot.add_rect(x1=x1, x2=x2, color=config.get_label_color(lab[0]))
+                else:
+                    #add rect for all plots
+                    plot.add_rect(x1=x1, x2=x2, color=config.get_label_color(lab[0]))
 
     def manage_empty(self):
         x_lim = None
@@ -196,8 +202,7 @@ class PlotCore:
 
     def move_cursor(self, xs, subplot_number):
         #move cursor
-        _, is_channel_independent = config.get_additional_options()
-        if is_channel_independent == 'false':
+        if self.is_channel_independent == 'false':
             for i in subplot_number:
                 self.plotters[i].move_line(xs)
         else:
@@ -301,7 +306,9 @@ class PlotCanvas(FigureCanvas):
             index = self.core.subplots.index(event.inaxes)
             popup = RightClickMenu(self, index, event)
             popup.exec_()
-
+            #reset plot option
+            if popup.reload:
+                self.core.redraw()
 
     def on_mouse_release(self, event):
         if event.button not in (MOUSE_LEFT, MOUSE_RIGHT) or event.inaxes not in self.core.subplots:
