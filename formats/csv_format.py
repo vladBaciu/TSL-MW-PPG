@@ -4,7 +4,7 @@ from formats.format import Format
 
 
 class CSVFormat(Format):
-    extensions = ['.csv']
+    extensions = ['.csv', ".txt"]
 
     @staticmethod
     def get_dialect(filename):
