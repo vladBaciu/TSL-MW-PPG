@@ -365,8 +365,7 @@ class PlotCanvas(FigureCanvas):
         self.labeler.update_functions()
 
     def save(self):
-        if self.modified:
-            config.save_file()
+        config.save_file()
         config.save_data_config()
         self.modified = False
 

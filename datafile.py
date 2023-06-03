@@ -134,16 +134,15 @@ class DataFile:
 
     def labels_list_to_df(self):
         if not self.labels_list:
-            return None
-
-        columns = [self.get_label_series(l) for l in self.labels_list]
-        all_columns = pd.concat(columns, axis=1)
+            available_labels, _  = config.get_labels_info()
+            n_rows = self.get_shape()
+            all_columns = pd.Series(n_rows * ['0'], name=available_labels[0])
+        else:
+            columns = [self.get_label_series(l) for l in self.labels_list]
+            all_columns = pd.concat(columns, axis=1)
         return all_columns
 
     def labels_merged_list_to_df(self):
-        if not self.labels_list:
-            return None
-
         columns = [self.get_label_series(l) for l in self.labels_list]
         all_columns = self.merge_same_label_types(columns)
         return all_columns
