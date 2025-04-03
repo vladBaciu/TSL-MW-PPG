@@ -2,7 +2,7 @@
 
 This is a fork of *Time Series Labeler* (TSL), a Python tool for time series analysis and labeling, now enhanced to support multi-channel independent labeling.
 
-![alt text](image.png)
+![alt text](image-1.png)
 
 ## Features
 - Multi-channel independent labeling
