@@ -108,7 +108,11 @@ class FilesData:
         return label, color
 
     def get_label_color(self, label):
-        index = self.config["labels"].index(label)
+        try:
+            index = self.config["labels"].index(label)
+        except:
+            #if label not existent, get default color
+            index = 0
         return self.config["colors"][index]
 
     def get_labels_info(self):
@@ -204,7 +208,7 @@ class ProjectData:
 
         #create potential tls_generated file name
         file_path_tsl = Path(file_path)
-        file_path_tsl = file_path_tsl.with_name(file_path_tsl.stem + '_tsl_generated' + file_path_tsl.suffix)
+        file_path_tsl = file_path_tsl.parent / 'tsl_generated' / file_path_tsl.name
 
         try:
             #try reading tsl_generated file if exists
@@ -507,8 +511,8 @@ def get_additional_options():
         additional_options = data_config.get_additional_options()
     except:
         #case when no project is available and only one file is selected. to be modified manually
-        #[AD project, Independent channels]
-        additional_options = ["true", "false"]
+        #[binary_label, independent_channel_labeling]
+        additional_options = ["true", "true"]
     return additional_options
 def get_functions():
     return data_config.get_functions()

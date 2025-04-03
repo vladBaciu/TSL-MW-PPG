@@ -158,7 +158,19 @@ class DataFile:
             all_data_final = pd.concat([all_data, label_df], axis=1)
 
         file_path = Path(self.filename)
-        new_file_name = file_path.with_name(file_path.stem + '_tsl_generated' + file_path.suffix)
+        # Ensure filename is valid
+        if not self.filename or not os.path.isfile(self.filename):
+            raise ValueError("Invalid filename provided: {}".format(self.filename))
+
+        # Keep same directory if already in tsl_generated folder
+        if os.path.dirname(self.filename).endswith("tsl_generated"):
+            new_dir_path = os.path.dirname(self.filename)
+        else:
+            # Create new directory for generated files
+            new_dir_path = os.path.join(os.path.dirname(self.filename), "tsl_generated")
+        os.makedirs(new_dir_path, exist_ok=True)
+        new_file_name = os.path.join(new_dir_path, file_path.name)
+
         self.io.save(all_data_final, new_file_name)
 
         # merge labels if is an anomaly detection project
