@@ -71,16 +71,30 @@ class DataFile:
         return pd.to_datetime(self.df[TIMESTAMP])
 
     @staticmethod
-    def get_label_range(label_col):
-        indexes = [i for i, val in enumerate(label_col) if val == 1.0]
-        return indexes[0], indexes[-1]
+    def get_label_ranges(label_col):
+        ranges = []
+        start = None
+
+        for i, val in enumerate(label_col):
+            if val == 1.0 and start is None:
+                start = i
+            elif val != 1.0 and start is not None:
+                ranges.append((start, i - 1))
+                start = None
+
+        if start is not None:  # Handle case where the range ends at the last element
+            ranges.append((start, len(label_col) - 1))
+
+        return ranges
 
     def update_labels_list(self, labels):
         self.labels_list = []
         for i, key in enumerate(list(self.df)):
             if ''.join(labels) in key:
                 data = self.df.iloc[:, i]
-                self.labels_list.append([key, self.get_label_range(data)])
+                ranges = self.get_label_ranges(data)
+                for r in ranges:
+                    self.labels_list.append([key, r])
 
         # Labels are removed from DataFrame to avoid mistakes
         for label in self.labels_list:
