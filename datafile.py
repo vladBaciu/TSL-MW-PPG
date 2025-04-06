@@ -95,6 +95,9 @@ class DataFile:
                 ranges = self.get_label_ranges(data)
                 for r in ranges:
                     self.labels_list.append([key, r])
+                # For individual channel labeling, some series may not have any labels
+                if len(ranges) == 0:
+                    self.labels_list.append((key, (0,0)))
 
         # Labels are removed from DataFrame to avoid mistakes
         for label in self.labels_list:
