@@ -1,6 +1,6 @@
 # Time Series Labeler &emsp;&emsp;&emsp; [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-349bff.svg)](https://www.gnu.org/licenses/gpl-3.0)  [![Python 3](https://img.shields.io/badge/Python-100%25-brightgreen.svg)](https://www.python.org/)
 
-This is a fork of *Time Series Labeler* (TSL), a Python tool for time series analysis and labeling, now enhanced to support multi-channel independent labeling.
+This is a fork of *Time Series Labeler* (TSL), a Python tool for time series analysis and labeling, now enhanced to support multi-channel independent labeling. The focus is on MW-PPG signals. The repo provides also an MW-PPG dataset.
 
 ![alt text](image-1.png)
 
