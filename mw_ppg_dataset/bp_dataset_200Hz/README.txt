@@ -5,7 +5,7 @@ The dataset contains a total of 180 subjects, each with 60 seconds signal length
 channel1: 660nm
 channel2: 730nm
 channel3: 850nm
-channel4: 940nm
+channel4: 940nm  -> deleted
 
 The above dataset is collected and managed by CardioWorks Team. If you have any questions about the data or relative researches, please contact us by email: liangyongbo@guet.edu.cn or liangyongbo001@gmail.com.
 The CardioWorks Team focuses on PPG-based portable or wearable cardiovascular health detection and disease assessment. For more research datasets and published papers, please pay attention to the following:
